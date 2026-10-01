@@ -165,3 +165,19 @@ h1,h2,h3,p{margin-top:0}
 .example.learned{border-color:rgba(255,107,61,.45);background:linear-gradient(145deg,rgba(255,107,61,.08),rgba(14,30,50,.94))}
 .voice-note{color:#8094ad;font-size:12px;line-height:1.55;margin:14px 4px}
 @media(max-width:430px){.listen-banner{align-items:flex-start}.listen-banner .primary{padding:10px 12px}.lesson-actions{flex-wrap:wrap}}
+
+/* V2 language-learning refinements */
+.language-switch{display:flex;gap:10px;margin:18px 0 6px;padding:5px;background:#0d1b2e;border:1px solid var(--line);border-radius:18px}
+.language-tab{flex:1;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:13px;padding:12px 10px;font-weight:800}
+.language-tab.active{background:#18304e;border-color:rgba(255,107,61,.55);color:var(--accent2)}
+.phonetic span{color:var(--muted);font-weight:500;margin-right:4px}
+#screen{scroll-margin-top:130px}
+@media(max-width:560px){
+  .topbar{min-height:94px;padding:14px 18px 13px}
+  .logo-mark{width:58px;height:58px;border-radius:19px;font-size:30px}
+  .brand-copy strong{font-size:25px}
+  .brand-copy small{font-size:12px;margin-top:5px}
+  .menu-btn{width:52px;height:52px;border-radius:18px}
+  .menu-btn span{width:24px;height:3px}
+  #screen{padding-top:30px;scroll-margin-top:108px}
+}

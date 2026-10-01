@@ -8,26 +8,73 @@ const jobs = [
   {id:"clean", title:"Schoonmaakmedewerker", company:"Schoonmaakbedrijf", city:"Hoogeveen", type:"Parttime", tag:"Schoonmaak", desc:"Voorbeeldvacature voor schoonmaakwerk.", requirements:["Nauwkeurig werken","Zelfstandig kunnen werken"], link:""}
 ];
 
-const lessons = [
-  {id:"hello", level:"A1", title:"Tanışma & selamlaşma", subtitle:"Hoi, hallo, hoe gaat het?", words:[
-    ["Hoi!","hoy","Selam! / Merhaba!"],
-    ["Hallo!","ha-lo","Merhaba!"],
-    ["Hoe gaat het?","hu gaat ut","Nasılsın? / Nasıl gidiyor?"],
-    ["Goed, dank je.","hut, dank yuh","İyi, teşekkürler."]
-  ]},
-  {id:"market", level:"A1", title:"Markette konuşma", subtitle:"Wat kost dit? · Dit is alles.", words:[
-    ["Wat kost dit?","vat kost dit","Bu ne kadar?"],
-    ["Ik wil deze.","ik vil day-zuh","Bunu istiyorum."],
-    ["Dat is alles.","dat is al-les","Hepsi bu."],
-    ["Kan ik pinnen?","kan ik pin-nen","Kartla ödeyebilir miyim?"]
-  ]},
-  {id:"work", level:"A1", title:"İş yerinde Hollandaca", subtitle:"Werk, pauze, klaar, wachten.", words:[
-    ["Ik ben klaar.","ik ben klaar","Hazırım / Bitirdim."],
-    ["Wanneer is de pauze?","va-neer is duh pau-zuh","Mola ne zaman?"],
-    ["Even wachten.","ay-ven vahk-ten","Biraz bekle."],
-    ["Komt goed.","komt hut","Tamam / Hallolur."]
-  ]}
-];
+const languagePacks = {
+  nl: {
+    name: "Hollandaca", flag: "🇳🇱", speech: "nl-NL", level: "A1",
+    description: "Hollanda'da gerçekten duyacağın ve kullanacağın günlük Hollandaca.",
+    lessons: [
+      {id:"nl-hello", level:"A1", title:"Tanışma & selamlaşma", subtitle:"Hoi, hallo, hoe gaat het?", words:[
+        ["Hoi!","hoy","Selam! / Merhaba!"],
+        ["Hallo!","ha-lo","Merhaba!"],
+        ["Hoe gaat het?","hu gaat ət","Nasılsın? / Nasıl gidiyor?"],
+        ["Goed, dank je.","hut, dank yuh","İyi, teşekkürler."]
+      ]},
+      {id:"nl-market", level:"A1", title:"Markette konuşma", subtitle:"Wat kost dit? · Dit is alles.", words:[
+        ["Wat kost dit?","vat kost dit","Bu ne kadar?"],
+        ["Ik wil deze.","ik vil de-zeh","Bunu istiyorum."],
+        ["Dat is alles.","dat is al-les","Hepsi bu."],
+        ["Kan ik pinnen?","kan ik pin-nen","Kartla ödeyebilir miyim?"]
+      ]},
+      {id:"nl-work", level:"A1", title:"İş yerinde Hollandaca", subtitle:"Werk, pauze, klaar, wachten.", words:[
+        ["Ik ben klaar.","ik ben klaar","Hazırım / Bitirdim."],
+        ["Wanneer is de pauze?","va-neer is duh pau-zuh","Mola ne zaman?"],
+        ["Even wachten.","ay-ven vahk-ten","Biraz bekle."],
+        ["Komt goed.","komt hut","Tamam / Hallolur."]
+      ]}
+    ]
+  },
+  en: {
+    name: "İngilizce", flag: "🇬🇧", speech: "en-GB", level: "A1",
+    description: "Günlük hayatta gerçekten kullanacağın pratik İngilizce.",
+    lessons: [
+      {id:"en-hello", level:"A1", title:"Tanışma & selamlaşma", subtitle:"Hello, hi, how are you?", words:[
+        ["Hello!","helo","Merhaba!"],
+        ["Hi!","hay","Selam!"],
+        ["How are you?","hau ar yu","Nasılsın?"],
+        ["I'm good, thank you.","aym gud, thank yu","İyiyim, teşekkür ederim."]
+      ]},
+      {id:"en-daily", level:"A1", title:"Günlük konuşmalar", subtitle:"Please, thank you, excuse me.", words:[
+        ["Please.","pliiz","Lütfen."],
+        ["Thank you.","tenk yu","Teşekkür ederim."],
+        ["Excuse me.","ikskyuuz mi","Affedersiniz / Pardon."],
+        ["I don't understand.","ay dont anderstend","Anlamıyorum."]
+      ]},
+      {id:"en-work", level:"A1", title:"İş yerinde İngilizce", subtitle:"Work, break, ready, help.", words:[
+        ["I'm ready.","aym redi","Hazırım."],
+        ["When is the break?","ven iz dı breyk","Mola ne zaman?"],
+        ["Can you help me?","ken yu help mi","Bana yardım eder misin?"],
+        ["No problem.","nou problem","Sorun değil."]
+      ]}
+    ]
+  }
+};
+
+function getLearningLanguage(){
+  try{return localStorage.getItem("yanimda_learning_language") || "nl"}catch(e){return "nl"}
+}
+function setLearningLanguage(lang){
+  try{localStorage.setItem("yanimda_learning_language",lang)}catch(e){}
+}
+function getPack(){return languagePacks[getLearningLanguage()] || languagePacks.nl}
+function getLessonById(id){
+  for(const pack of Object.values(languagePacks)){
+    const found=pack.lessons.find(l=>l.id===id);
+    if(found) return {lesson:found, pack};
+  }
+  return {lesson:languagePacks.nl.lessons[0], pack:languagePacks.nl};
+}
+
+const lessons = languagePacks.nl.lessons;
 
 const translations = {
   "merhaba":"Hallo!",
@@ -99,16 +146,22 @@ function show(page){
   if(page==="job-detail") return renderJobDetail(window.selectedJobId);
 
   if(page==="learn"){
+    const pack=getPack();
     x = `
       <button class="back" onclick="show('home')">← Ana sayfa</button>
-      <h1 class="page-title">Hollandaca Öğren 🇳🇱</h1>
-      <p class="sub">Kitap dili değil; Hollanda'da gerçekten duyacağın ve kullanacağın Hollandaca.</p>
-      <div class="learn-card"><span class="level">A1 · Başlangıç</span><h2>Günlük Konuşmalar</h2><p class="sub">Tanışma, market, ulaşım, iş ve günlük hayat.</p><div class="progress"><span></span></div><div class="lesson-row"><span>Başlangıç ilerlemesi</span><strong id="learnPercent">18%</strong></div></div>
-      ${lessons.map((l,i)=>`<button class="lesson" onclick="showLesson('${l.id}')"><div class="num">0${i+1}</div><div><strong>${l.title}</strong><small>${l.subtitle}</small></div><span>›</span></button>`).join("")}
+      <h1 class="page-title">Dil Öğren ${pack.flag}</h1>
+      <p class="sub">${pack.description}</p>
+      <div class="language-switch" role="tablist" aria-label="Öğrenilecek dili seç">
+        <button class="language-tab ${getLearningLanguage()==="nl"?"active":""}" onclick="changeLearningLanguage('nl')">🇳🇱 Hollandaca</button>
+        <button class="language-tab ${getLearningLanguage()==="en"?"active":""}" onclick="changeLearningLanguage('en')">🇬🇧 İngilizce</button>
+      </div>
+      <div class="learn-card"><span class="level">${pack.level} · Başlangıç</span><h2>Günlük Konuşmalar</h2><p class="sub">Tanışma, günlük hayat ve iş ortamında kullanabileceğin cümleler.</p><div class="progress"><span></span></div><div class="lesson-row"><span>Başlangıç ilerlemesi</span><strong id="learnPercent">0%</strong></div></div>
+      ${pack.lessons.map((l,i)=>`<button class="lesson" onclick="showLesson('${l.id}')"><div class="num">0${i+1}</div><div><strong>${l.title}</strong><small>${l.subtitle}</small></div><span>›</span></button>`).join("")}
       <div class="section-head"><h2>Seviye yolu</h2></div>
       <div class="profile-card">
         ${["A0 · Temel","A1 · Başlangıç","A2 · Günlük hayat","B1 · Orta","B2 · İleri","C1 · İleri düzey"].map((v,i)=>`<div class="profile-row"><div><strong>${v}</strong><small>${i<2?"Başlangıç içeriği hazır": "Yakında"}</small></div><span>${i<2?"✓":"›"}</span></div>`).join("")}
       </div>
+      <div class="voice-note">Her cümlenin altında kolay okunuş bulunur. 🔊 Dinle düğmesi seçtiğin dilin cihazdaki sesini kullanır.</div>
     `;
   }
 
@@ -163,8 +216,10 @@ function show(page){
 
   screen.innerHTML = layout(x);
   if(page==="learn"){
-    const learnedCount=getLearned().length;
-    const pct=Math.min(100,18 + Math.round(learnedCount/12*82));
+    const pack=getPack();
+    const total=pack.lessons.reduce((n,l)=>n+l.words.length,0);
+    const learnedCount=getLearned().filter(k=>k.startsWith(getLearningLanguage()+":")).length;
+    const pct=total ? Math.min(100,Math.round((learnedCount/total)*100)) : 0;
     const p=document.querySelector(".progress span");
     const label=document.getElementById("learnPercent");
     if(p)p.style.width=pct+"%";
@@ -222,57 +277,72 @@ function renderJobDetail(id){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
+function changeLearningLanguage(lang){
+  if(!languagePacks[lang]) return;
+  setLearningLanguage(lang);
+  show("learn");
+}
 function showLesson(id){window.selectedLessonId=id;show("lesson")}
 function getLearned(){
-  try{return JSON.parse(localStorage.getItem("yanimda_learned")||"[]")}catch(e){return []}
+  try{
+    const items=JSON.parse(localStorage.getItem("yanimda_learned")||"[]");
+    return Array.isArray(items) ? items : [];
+  }catch(e){return []}
 }
-function setLearned(items){
-  try{localStorage.setItem("yanimda_learned",JSON.stringify(items))}catch(e){}
-}
+function setLearned(items){try{localStorage.setItem("yanimda_learned",JSON.stringify(items))}catch(e){}}
 function renderLesson(id){
-  const l=lessons.find(x=>x.id===id)||lessons[0];
+  const found=getLessonById(id);
+  const l=found.lesson, pack=found.pack;
   const learned=getLearned();
   screen.innerHTML=layout(`
-    <button class="back" onclick="show('learn')">← Derslere dön</button>
-    <span class="level">${l.level} · Günlük Hollandaca</span>
+    <button class="back" onclick="show('learn')">← ${pack.name} derslerine dön</button>
+    <span class="level">${l.level} · ${pack.name}</span>
     <h1 class="page-title" style="margin-top:15px">${l.title}</h1>
     <p class="sub">${l.subtitle}</p>
     <div class="detail-card">
       <div class="listen-banner">
-        <div><strong>🔊 Hollandaca dinle</strong><small>Dokununca cümleyi doğal Hollandaca telaffuzla seslendirir.</small></div>
-        <button class="primary" onclick="speak('${escapeAttr(l.words[0][0])}')">Dinle</button>
+        <div><strong>🔊 ${pack.name} dinle</strong><small>Dokununca cümleyi doğal ${pack.name} telaffuzuyla seslendirir.</small></div>
+        <button class="primary" onclick="speak('${escapeAttr(l.words[0][0])}','${pack.speech}')">Dinle</button>
       </div>
       ${l.words.map((w,i)=>{
-        const done=learned.includes(w[0]);
+        const key=`${getLearningLanguage()}:${w[0]}`;
+        const done=learned.includes(key) || (getLearningLanguage()==="nl" && learned.includes(w[0]));
         return `<div class="example ${done?"learned":""}">
-          <strong>${w[0]}</strong>
-          <div class="phonetic">${w[1]}</div>
-          <div class="meaning">${w[2]}</div>
+          <strong>${escapeHtml(w[0])}</strong>
+          <div class="phonetic"><span>Okunuş:</span> ${escapeHtml(w[1])}</div>
+          <div class="meaning">${escapeHtml(w[2])}</div>
           <div class="lesson-actions">
-            <button class="ghost" onclick="speak('${escapeAttr(w[0])}')">🔊 Dinle</button>
+            <button class="ghost" onclick="speak('${escapeAttr(w[0])}','${pack.speech}')">🔊 Dinle</button>
             <button class="ghost" onclick="markLearned('${escapeAttr(w[0])}')">${done?"✓ Öğrenildi":"✓ Öğrendim"}</button>
           </div>
         </div>`;
       }).join("")}
     </div>
-    <div class="voice-note">Ses, telefonunun yerleşik Hollandaca (nl-NL) konuşma motorunu kullanır. İnternet bağlantısı olmadan çalışması cihazdaki ses desteğine bağlıdır.</div>
+    <div class="voice-note">Ses, telefonunun yerleşik ${pack.name} (${pack.speech}) konuşma motorunu kullanır. Kullanılabilir sesler cihaza ve tarayıcıya göre değişebilir.</div>
   `);
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
-function speak(text){
+function speak(text,lang){
   if(!("speechSynthesis" in window)){toast("Bu cihazda sesli okuma kullanılamıyor.");return}
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang="nl-NL";
+  u.lang=lang || getPack().speech;
   u.rate=.78;
   u.pitch=1;
   u.volume=1;
+  const voices=window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+  const voice=voices.find(v=>v.lang===u.lang) || voices.find(v=>v.lang && v.lang.toLowerCase().startsWith(u.lang.split("-")[0].toLowerCase()));
+  if(voice) u.voice=voice;
   window.speechSynthesis.speak(u);
 }
 function markLearned(word){
+  const lang=getLearningLanguage();
+  const key=`${lang}:${word}`;
   const items=getLearned();
-  if(!items.includes(word)){items.push(word);setLearned(items)}
+  if(!items.includes(key)){
+    items.push(key);
+    setLearned(items);
+  }
   toast(`“${word}” öğrenildi olarak işaretlendi.`);
   renderLesson(window.selectedLessonId);
 }

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<title>YANIMDA</title>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand"><div class="logo">♥</div><div><b>YANIMDA</b><small>Her zaman yanında.</small></div></div>
+    <button class="iconbtn" onclick="show('profil')">☰</button>
+  </header>
+
+  <main id="screen"></main>
+
+  <nav class="nav">
+    <button onclick="show('home')" data-s="home">⌂<span>Ana Sayfa</span></button>
+    <button onclick="show('jobs')" data-s="jobs">💼<span>İş Bul</span></button>
+    <button onclick="show('learn')" data-s="learn">📖<span>Öğren</span></button>
+    <button onclick="show('translate')" data-s="translate">文<span>Çeviri</span></button>
+    <button onclick="show('nearby')" data-s="nearby">⌖<span>Yakınımda</span></button>
+  </nav>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

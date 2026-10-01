@@ -181,3 +181,26 @@ h1,h2,h3,p{margin-top:0}
   .menu-btn span{width:24px;height:3px}
   #screen{padding-top:30px;scroll-margin-top:108px}
 }
+
+/* Clear, multilingual learning setup */
+.language-setup{display:grid;gap:14px;margin:18px 0 8px}
+.choice-block{background:#0d1b2e;border:1px solid var(--line);border-radius:22px;padding:15px}
+.choice-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.45;margin-bottom:10px}
+.explanation-switch,.target-switch{margin:0;background:#101f33}
+.language-switch{flex-wrap:wrap}
+.language-tab{min-height:46px}
+.language-tab.coming{opacity:.5;cursor:not-allowed}
+.learning-example{padding:13px 15px;border-radius:17px;background:rgba(255,107,61,.07);border:1px solid rgba(255,107,61,.22);color:var(--muted);font-size:13px;line-height:1.5}
+.learning-example strong{color:var(--text)}
+.learning-example span{color:var(--accent2)}
+.learning-context{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0 2px;padding:11px 14px;border:1px solid var(--line);background:#0d1b2e;border-radius:16px;color:var(--muted);font-weight:700}
+.learning-context b{color:var(--accent2)}
+.meaning-label{color:var(--muted);font-size:12px;font-weight:800;margin-top:12px;margin-bottom:2px}
+
+@media(max-width:560px){
+  .target-switch .language-tab{flex:1 1 calc(50% - 10px)}
+  .explanation-switch .language-tab{flex:1 1 calc(50% - 10px)}
+  .learning-example{font-size:12px}
+}
+
+.job-description{font-size:17px;line-height:1.7;color:var(--text);margin:14px 0 18px}.job-learning-label{font-size:14px;font-weight:800;color:var(--accent2);margin-top:18px}.job-apply-box{margin-top:22px}.apply-link{display:inline-block;text-decoration:none;margin-top:16px;text-align:center}.job-source-note{display:block;color:var(--muted);line-height:1.5;margin-top:12px}
